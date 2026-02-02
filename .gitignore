@@ -1,0 +1,61 @@
+## User settings
+.xcuserdata/
+
+## Swift Package Manager
+# Ignore Swift Package Manager build artifacts directory
+.swiftpm/
+# except for the Package.resolved file which tracks dependency versions
+!.swiftpm/xcode/package.resolved
+
+Package.resolved
+
+## Build generated files
+build/
+DerivedData/
+
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Xcode workspace
+*.xcworkspace
+
+## Other Xcode project files
+# User interface state and layout settings
+*.xcuserdatad/
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Dependency Management (if applicable)
+# CocoaPods
+Pods/
+# Except for the Podfile and Podfile.lock which track dependency versions
+!Podfile
+!Podfile.lock
+
+# Carthage
+Carthage/Build/
+
+# Xcode
+.DS_Store
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Code Injection
+*.xcodeproj/xcshareddata/IDETemplateMacros.plist
+
+# Misc
+*.swp
+*~.nib
+
+# App-specific
+*.xcuserstate
+*.xccheckout
+*.moved-aside
