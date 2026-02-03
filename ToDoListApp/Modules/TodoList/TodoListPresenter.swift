@@ -35,6 +35,10 @@ extension TodoListPresenter: TodoListPresenterProtocol {
         self.router?.navigateToAddTask()
     }
     
+    func didReqiredRefresh() {
+        self.interactor?.refreshTasks()
+    }
+    
     func didSelectTask(at index: Int) {
         // TODO: Navigate to edit
     }

@@ -7,9 +7,16 @@
 
 import Foundation
 
-struct TodoResponse: Decodable {
-    let todos: [LightTodoItem]
+struct TodoResponse: nonisolated Decodable {
+    let tasks: [LightTodoItem]
     let total: Int
     let skip: Int
     let limit: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case tasks = "todos"
+        case total
+        case skip
+        case limit
+    }
 }

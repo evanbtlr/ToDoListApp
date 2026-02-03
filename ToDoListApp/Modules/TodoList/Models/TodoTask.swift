@@ -38,14 +38,15 @@ struct TodoTask {
     
     // MARK: Mapping to CoreData (in CoreDataManager)
     func toTodoItem(context: NSManagedObjectContext) -> TodoItem {
-        return TodoItem(
-            context: context,
-            id: id,
-            title: title,
-            description: description,
-            createdDate: createdAt,
-            isCompleted: isCompleted
-        )
+        let item = TodoItem(context: context)
+        
+        item.id = self.id
+        item.title = self.title
+        item.desc = self.description
+        item.isCompleted = self.isCompleted
+        item.createdDate = self.createdAt
+        
+        return item
     }
 }
 

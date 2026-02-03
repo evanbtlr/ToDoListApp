@@ -29,6 +29,12 @@ final class TodoListInteractor {
 // MARK: - Interactor Protocol
 extension TodoListInteractor: TodoListInteractorProtocol {
     func fetchTasks() {
+        self.coreDataManager.loadInitialDataFromAPI { [weak self] result in
+            self?.handleFetchResult(result)
+        }
+    }
+    
+    func refreshTasks() {
         self.coreDataManager.fetchAll { [weak self] result in
             self?.handleFetchResult(result)
         }

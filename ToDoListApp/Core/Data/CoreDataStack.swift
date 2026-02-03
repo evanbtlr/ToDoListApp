@@ -43,8 +43,16 @@ final class CoreDataStack {
         return persistentContainer.viewContext
     }
     
+    lazy var backgroundContext: NSManagedObjectContext = {
+        self.newBackgroundContext()
+    }()
+    
     func newBackgroundContext() -> NSManagedObjectContext {
-        return persistentContainer.newBackgroundContext()
+        let backgroundContext = persistentContainer.newBackgroundContext()
+        
+        backgroundContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        
+        return backgroundContext
     }
     
     // MARK: Save Methods
@@ -66,39 +74,12 @@ final class CoreDataStack {
         }
     }
     
-    func saveBackgroundContext(_ context: NSManagedObjectContext) {
-        guard context.hasChanges else { return }
-        
-        do {
-            try context.save()
-            
-#if DEBUG
-            print("Background context saved successfully")
-#endif
-        } catch {
-#if DEBUG
-            print("Failed to save background context: \(error)")
-#endif
-            
-            context.rollback()
-        }
-    }
-    
     // MARK: Helper Methods
     func performBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {
-        persistentContainer.performBackgroundTask { context in
-            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        let context = self.backgroundContext
+        
+        context.performAndWait {
             block(context)
-            
-            if context.hasChanges {
-                do {
-                    try context.save()
-                } catch {
-#if DEBUG
-                    print("Background task save failed: \(error)")
-#endif
-                }
-            }
         }
     }
 }

@@ -7,6 +7,7 @@
 
 protocol TodoListInteractorProtocol: AnyObject {
     func fetchTasks()
+    func refreshTasks()
     func searchTasks(with query: String)
     func toggleTaskCompletion(_ task: TodoTask)
     func deleteTask(_ task: TodoTask)

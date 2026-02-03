@@ -9,6 +9,7 @@ import Foundation
 import CoreData
 
 protocol CoreDataManagerProtocol {
+    
     // MARK: CRUD Operations
     func fetchAll(completion: @escaping (Result<[TodoItem], Error>) -> Void)
     func fetch(by id: UUID, completion: @escaping (Result<TodoItem?, Error>) -> Void)
@@ -20,6 +21,5 @@ protocol CoreDataManagerProtocol {
     func search(with query: String, completion: @escaping (Result<[TodoItem], Error>) -> Void)
     
     // MARK: Bulk Operations
-    func saveFromDTOs(_ items: [LightTodoItem], completion: @escaping (Result<Void, Error>) -> Void)
     func deleteAll(completion: @escaping (Result<Void, Error>) -> Void)
 }

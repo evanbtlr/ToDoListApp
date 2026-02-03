@@ -11,12 +11,15 @@ import CoreData
 // MARK: - Mapping to CoreData Entity
 extension LightTodoItem {
     func toCoreDataEntity(context: NSManagedObjectContext) -> TodoItem {
-            return TodoItem(
-                context: context,
-                title: self.todo,
-                description: nil,
-                isCompleted: self.completed,
-                serverId: Int32(self.id)
-            )
-        }
+        let item = TodoItem(context: context)
+        
+        item.id = UUID()
+        item.title = self.title
+        item.desc = nil
+        item.createdDate = Date()
+        item.isCompleted = self.completed
+        item.serverId = Int32(self.id)
+        
+        return item
+    }
 }

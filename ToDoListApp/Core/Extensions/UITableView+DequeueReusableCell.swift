@@ -13,6 +13,7 @@ extension UITableView {
     }
     
     func register<TCell>(cell cellType: TCell.Type) where TCell: UITableViewCell {
-        self.register(cellType.self, forCellReuseIdentifier: cellType.identifier())
+        let nib = UINib(nibName: cellType.identifier(), bundle: nil)
+        self.register(nib, forCellReuseIdentifier: cellType.identifier())
     }
 }

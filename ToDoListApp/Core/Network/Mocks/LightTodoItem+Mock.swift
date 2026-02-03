@@ -9,7 +9,7 @@ extension LightTodoItem {
     static var mock: LightTodoItem {
             return LightTodoItem(
                 id: 1,
-                todo: "Buy groceries",
+                title: "Buy groceries",
                 completed: false,
                 userId: 1
             )
@@ -17,9 +17,9 @@ extension LightTodoItem {
         
         static var mockArray: [LightTodoItem] {
             return [
-                LightTodoItem(id: 1, todo: "Buy groceries", completed: false, userId: 1),
-                LightTodoItem(id: 2, todo: "Finish project", completed: true, userId: 1),
-                LightTodoItem(id: 3, todo: "Call mom", completed: false, userId: 1)
+                LightTodoItem(id: 1, title: "Buy groceries", completed: false, userId: 1),
+                LightTodoItem(id: 2, title: "Finish project", completed: true, userId: 1),
+                LightTodoItem(id: 3, title: "Call mom", completed: false, userId: 1)
             ]
         }
 }

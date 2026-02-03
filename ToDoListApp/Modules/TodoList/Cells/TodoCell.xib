@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="83" id="GWT-TT-EJb" customClass="TodoCell" customModule="ToDoListApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="83"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="GWT-TT-EJb" id="tle-bE-4ox">
+                <rect key="frame" x="0.0" y="0.0" width="393" height="83"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="sfs-bf-OZT">
+                        <rect key="frame" x="316" y="27.666666666666671" width="63" height="28"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="61" id="JQL-PQ-Sch"/>
+                        </constraints>
+                        <color key="tintColor" name="AccentColor"/>
+                        <color key="onTintColor" name="AccentColor"/>
+                    </switch>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="BGg-PH-k7i">
+                        <rect key="frame" x="16" y="16" width="284" height="51"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ke-Z7-PxZ">
+                                <rect key="frame" x="0.0" y="0.0" width="284" height="19.333333333333332"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VIn-Gm-ek2">
+                                <rect key="frame" x="0.0" y="19.333333333333336" width="284" height="31.666666666666664"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="BGg-PH-k7i" firstAttribute="top" secondItem="tle-bE-4ox" secondAttribute="top" constant="16" id="4We-GD-OPk"/>
+                    <constraint firstItem="sfs-bf-OZT" firstAttribute="leading" secondItem="BGg-PH-k7i" secondAttribute="trailing" constant="16" id="89y-yG-pca"/>
+                    <constraint firstAttribute="trailing" secondItem="sfs-bf-OZT" secondAttribute="trailing" constant="16" id="Ejs-xh-oPZ"/>
+                    <constraint firstAttribute="bottom" secondItem="BGg-PH-k7i" secondAttribute="bottom" constant="16" id="Igu-kc-SGx"/>
+                    <constraint firstItem="sfs-bf-OZT" firstAttribute="centerY" secondItem="tle-bE-4ox" secondAttribute="centerY" id="U9c-31-kNt"/>
+                    <constraint firstItem="BGg-PH-k7i" firstAttribute="leading" secondItem="tle-bE-4ox" secondAttribute="leading" constant="16" id="tbC-80-lby"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="completedSwitch" destination="sfs-bf-OZT" id="tK7-7K-56a"/>
+                <outlet property="descriptionLabel" destination="VIn-Gm-ek2" id="sw4-0s-Tfg"/>
+                <outlet property="titleLabel" destination="3ke-Z7-PxZ" id="ds9-aN-fUX"/>
+            </connections>
+            <point key="canvasLocation" x="-640.4580152671756" y="73.591549295774655"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

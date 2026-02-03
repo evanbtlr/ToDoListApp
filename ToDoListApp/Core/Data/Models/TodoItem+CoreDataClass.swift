@@ -11,7 +11,4 @@ public import CoreData
 
 public typealias TodoItemCoreDataClassSet = NSSet
 
-
-public class TodoItem: NSManagedObject {
-
-}
+public class TodoItem: NSManagedObject { }
