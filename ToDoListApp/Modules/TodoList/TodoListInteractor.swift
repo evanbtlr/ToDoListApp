@@ -12,33 +12,79 @@ final class TodoListInteractor {
     
     // MARK: Properties
     weak var presenter: TodoListInteractorOutputProtocol?
+    private let coreDataManager = CoreDataManager.shared
+    
+    // MARK: Private Methods
+        private func handleFetchResult(_ result: Result<[TodoItem], Error>) {
+            switch result {
+            case .success(let todoItems):
+                let tasks = todoItems.map { TodoTask(from: $0) }
+                self.presenter?.tasksFetched(tasks)
+            case .failure(let error):
+                self.presenter?.tasksFetchFailed(error)
+            }
+        }
 }
 
 // MARK: - Interactor Protocol
 extension TodoListInteractor: TodoListInteractorProtocol {
     func fetchTasks() {
-        // TODO: Fetch from CoreData/API
-        
-        // For now, return dummy data
-        let dummyTasks = [
-            TodoTask(title: "Buy groceries", description: "Milk, Eggs, Bread"),
-            TodoTask(title: "Finish project", description: "VIPER implementation")
-        ]
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.presenter?.tasksFetched(dummyTasks)
+        self.coreDataManager.fetchAll { [weak self] result in
+            self?.handleFetchResult(result)
         }
     }
     
     func searchTasks(with query: String) {
-        // TODO: Implement search
+        self.coreDataManager.search(with: query) { [weak self] result in
+            self?.handleFetchResult(result)
+        }
     }
     
     func toggleTaskCompletion(_ task: TodoTask) {
-        // TODO: Toggle completion
+        // First fetch the TodoItem by ID
+        self.coreDataManager.fetch(by: task.id) { [weak self] result in
+            switch result {
+            case .success(let todoItem):
+                if let todoItem = todoItem {
+                    let newCompletionStatus = !todoItem.isCompleted
+                    self?.coreDataManager.update(
+                        todoItem,
+                        title: nil,
+                        description: nil,
+                        isCompleted: newCompletionStatus
+                    ) { updateResult in
+                        switch updateResult {
+                        case .success:
+                            self?.fetchTasks() // Refresh the list
+                        case .failure(let error):
+                            self?.presenter?.tasksFetchFailed(error)
+                        }
+                    }
+                }
+            case .failure(let error):
+                self?.presenter?.tasksFetchFailed(error)
+            }
+        }
     }
     
     func deleteTask(_ task: TodoTask) {
-        // TODO: Delete task
+        // First fetch the TodoItem by ID
+        self.coreDataManager.fetch(by: task.id) { [weak self] result in
+            switch result {
+            case .success(let todoItem):
+                if let todoItem = todoItem {
+                    self?.coreDataManager.delete(todoItem) { deleteResult in
+                        switch deleteResult {
+                        case .success:
+                            self?.fetchTasks() // Refresh the list
+                        case .failure(let error):
+                            self?.presenter?.tasksFetchFailed(error)
+                        }
+                    }
+                }
+            case .failure(let error):
+                self?.presenter?.tasksFetchFailed(error)
+            }
+        }
     }
 }

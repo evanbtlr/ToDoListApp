@@ -12,6 +12,8 @@ final class TodoListViewController: UIViewController {
     
     // MARK: Properties
     var presenter: TodoListPresenterProtocol?
+    
+    private var tasks: [TodoTask] = []
 
     // MARK: UI Components
     private weak var tableView: UITableView!
@@ -73,18 +75,37 @@ final class TodoListViewController: UIViewController {
     @objc private func addButtonTapped() {
         self.presenter?.didTapAddButton()
     }
+    
+    // MARK: Private Methods
+    private func showEmptyStateIfNeeded() {
+        if tasks.isEmpty {
+            let emptyLabel = UILabel()
+            emptyLabel.text = "No tasks yet\nTap + to add your first task"
+            emptyLabel.textAlignment = .center
+            emptyLabel.numberOfLines = 0
+            emptyLabel.textColor = .secondaryLabel
+            tableView.backgroundView = emptyLabel
+        } else {
+            tableView.backgroundView = nil
+        }
+    }
 }
 
 // MARK: Table View Data Source
 extension TodoListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0 // TODO: Will be update by presenter
+        return tasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: TodoCell = tableView.dequeueReusableCell(for: indexPath)
+        let task = tasks[indexPath.row]
         
-        // TODO: Configure cell
+        cell.configurate(with: task)
+        
+        cell.onToggle = { [weak self] isCompleted in
+            self?.presenter?.didToggleTaskCompletion(at: indexPath.row)
+        }
         
         return cell
     }
@@ -100,7 +121,10 @@ extension TodoListViewController: UITableViewDelegate {
 // MARK: View Protocol
 extension TodoListViewController: TodoListViewProtocol {
     func showTasks(_ tasks: [TodoTask]) {
-        // TODO: Update table view
+        self.tasks = tasks
+        
+        self.tableView.reloadData()
+        self.showEmptyStateIfNeeded()
     }
     
     func showLoading() {

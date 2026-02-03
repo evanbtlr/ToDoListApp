@@ -10,6 +10,9 @@ import UIKit
 // MARK: - Cell
 final class TodoCell: UITableViewCell {
     
+    // MARK: Properties
+    var onToggle: ((Bool) -> Void)?
+    
     // MARK: UI Components
     private var titleLabel: UILabel!
     private var descriptionLabel: UILabel!
@@ -51,6 +54,7 @@ final class TodoCell: UITableViewCell {
         let completedSwitch = UISwitch()
         
         completedSwitch.translatesAutoresizingMaskIntoConstraints = false
+        completedSwitch.addTarget(self, action: #selector(switchToggled), for: .valueChanged)
         
         self.completedSwitch = completedSwitch
         self.addSubview(completedSwitch)
@@ -78,6 +82,10 @@ final class TodoCell: UITableViewCell {
         self.descriptionLabel.text = task.description
         self.completedSwitch.isOn = task.isCompleted
         
+        // Remove previous targets to avoid multiple calls
+        self.completedSwitch.removeTarget(nil, action: nil, for: .valueChanged)
+        self.completedSwitch.addTarget(self, action: #selector(switchToggled), for: .valueChanged)
+        
         if task.isCompleted {
             let attributedString = NSAttributedString(string: task.title, attributes: [.strikethroughStyle: NSUnderlineStyle.single.rawValue])
             
@@ -88,6 +96,11 @@ final class TodoCell: UITableViewCell {
             self.titleLabel.text = task.title
             self.titleLabel.textColor = .label
         }
+    }
+    
+    // MARK: Actions
+    @objc private func switchToggled(_ sender: UISwitch) {
+        onToggle?(sender.isOn)
     }
 }
 
