@@ -9,11 +9,11 @@ import UIKit
 
 final class EditTodoRouter {
     
-    // MARK: - Properties
+    // MARK: Properties
     weak var viewController: UIViewController?
     weak var todoListViewController: TodoListViewController?
     
-    // MARK: - Private Methods
+    // MARK: Private Methods
     private func refreshTodoList() {
         self.todoListViewController?.presenter?.handleViewWillAppear()
     }

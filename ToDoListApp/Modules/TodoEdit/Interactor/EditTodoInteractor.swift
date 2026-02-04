@@ -9,11 +9,11 @@ internal import Foundation
 
 final class EditTodoInteractor {
     
-    // MARK: - Properties
+    // MARK: Properties
     private let coreDataManager = CoreDataManager.shared
 }
 
-// MARK: - EditTodoInteractorProtocol
+// MARK: - Edit Todo Interactor Protocol
 extension EditTodoInteractor: EditTodoInteractorProtocol {
     func save(_ data: EditTodoData, completion: @escaping (Result<TodoTask, Error>) -> Void) {
         self.coreDataManager.create(title: data.title, description: data.description) { result in

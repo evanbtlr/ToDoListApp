@@ -9,12 +9,12 @@ import UIKit
 
 final class EditTodoViewController: UIViewController {
     
-    // MARK: - Properties
+    // MARK: Properties
     var presenter: EditTodoPresenterProtocol?
     
     private var isCompleted: Bool = false
     
-    // MARK: - UI Components
+    // MARK: UI Components
     private weak var scrollView: UIScrollView!
     private weak var contentView: UIView!
     private weak var titleLabel: UILabel!
@@ -29,7 +29,7 @@ final class EditTodoViewController: UIViewController {
     private weak var saveButton: UIButton!
     private weak var loadingIndicator: UIActivityIndicatorView!
     
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,7 +43,7 @@ final class EditTodoViewController: UIViewController {
         self.hideKeyboardWhenTappedAround()
     }
     
-    // MARK: - Setup
+    // MARK: Setup
     private func setupUI() {
         self.title = "Edit Task"
         self.view.backgroundColor = .systemBackground
@@ -306,7 +306,7 @@ final class EditTodoViewController: UIViewController {
         )
     }
     
-    // MARK: - Actions
+    // MARK: Actions
     @objc private func saveButtonTapped() {
         self.dismissKeyboard()
         
@@ -356,10 +356,11 @@ final class EditTodoViewController: UIViewController {
         self.scrollView.scrollIndicatorInsets = .zero
     }
     
-    // MARK: - Private Methods
+    // MARK: Private Methods
     private func showValidationLabel(_ message: String) {
         self.validationLabel.text = message
         self.validationLabel.isHidden = false
+        
         self.titleTextField.layer.borderWidth = 1
         self.titleTextField.layer.borderColor = UIColor.systemRed.cgColor
         self.titleTextField.layer.cornerRadius = 6
@@ -367,6 +368,7 @@ final class EditTodoViewController: UIViewController {
     
     private func clearValidationLabel() {
         self.validationLabel.isHidden = true
+        
         self.titleTextField.layer.borderWidth = 0
         self.titleTextField.layer.borderColor = nil
     }
@@ -376,25 +378,26 @@ final class EditTodoViewController: UIViewController {
     }
 }
 
-// MARK: - UITextFieldDelegate
+// MARK: Text Field Delegate
 extension EditTodoViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == titleTextField {
+        if textField == self.titleTextField {
             self.descriptionTextView.becomeFirstResponder()
         }
+        
         return true
     }
 }
 
-// MARK: - UITextViewDelegate
+// MARK: Text View Delegate
 extension EditTodoViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        updatePlaceholderVisibility()
-        presenter?.didUpdateDescription(textView.text)
+        self.updatePlaceholderVisibility()
+        self.presenter?.didUpdateDescription(textView.text)
     }
 }
 
-// MARK: - EditTodoViewProtocol
+// MARK: - Edit Todo View Protocol
 extension EditTodoViewController: EditTodoViewProtocol {
     func showData(_ data: EditTodoData) {
         self.titleTextField.text = data.title

@@ -9,7 +9,7 @@ internal import Foundation
 
 final class EditTodoPresenter {
     
-    // MARK: - Properties
+    // MARK: Properties
     weak var view: EditTodoViewProtocol?
     var interactor: EditTodoInteractorProtocol?
     var router: EditTodoRouterProtocol?
@@ -17,13 +17,13 @@ final class EditTodoPresenter {
     private var data: EditTodoData
     private var originalData: EditTodoData
     
-    // MARK: - Initialization
+    // MARK: Initialization
     init(data: EditTodoData = EditTodoData()) {
         self.data = data
         self.originalData = data
     }
     
-    // MARK: - Private Methods
+    // MARK: Private Methods
     private func hasChanges() -> Bool {
         return self.data.title != self.originalData.title || self.data.description != self.originalData.description || self.data.isCompleted != self.originalData.isCompleted
     }
@@ -106,7 +106,7 @@ extension EditTodoPresenter: EditTodoPresenterProtocol {
         self.data.description = text.isEmpty ? nil : text
     }
     
-    // MARK: - Private Helper
+    // MARK: Private Helper
     private func showCancelConfirmation() {
         // In a real app, you would show an alert here
         // For simplicity, we'll just close

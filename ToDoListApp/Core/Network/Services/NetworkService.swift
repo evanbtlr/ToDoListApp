@@ -23,10 +23,17 @@ final class NetworkService {
     )
     
     // MARK: - Initialization
-    init(session: URLSession = .shared) {
-        self.session = session
-        self.decoder = JSONDecoder()
+    init(session: URLSession? = nil) {
+        let configuration = URLSessionConfiguration.default
         
+        configuration.timeoutIntervalForRequest = 30
+        configuration.timeoutIntervalForResource = 60
+        configuration.waitsForConnectivity = true
+        configuration.allowsCellularAccess = true
+        
+        self.session = session ?? URLSession(configuration: configuration)
+        
+        self.decoder = JSONDecoder()
         self.decoder.keyDecodingStrategy = .convertFromSnakeCase
     }
     
@@ -37,7 +44,7 @@ final class NetworkService {
             
             guard let url = URL(string: "https://dummyjson.com/todos") else {
                 DispatchQueue.main.async {
-                    completion(.failure(NSError(domain: "Network", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+                    completion(.failure(NetworkError.invalidURL))
                 }
                 return
             }
@@ -49,34 +56,51 @@ final class NetworkService {
             let task = self.session.dataTask(with: request) { data, response, error in
                 if let error = error {
                     DispatchQueue.main.async {
-                        completion(.failure(error))
+                        let nsError = error as NSError
+                        
+                        switch nsError.code {
+                        case NSURLErrorNotConnectedToInternet:
+                            completion(.failure(NetworkError.noInternetConnection))
+                        case NSURLErrorTimedOut:
+                            completion(.failure(NetworkError.timeout))
+                        default:
+                            completion(.failure(NetworkError.requestFailed(error)))
+                        }
+                        
                     }
                     return
                 }
                 
-                guard let httpResponse = response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
+                guard let httpResponse = response as? HTTPURLResponse else {
                     DispatchQueue.main.async {
-                        completion(.failure(NSError(domain: "Network", code: -2, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])))
+                        completion(.failure(NetworkError.invalidResponse))
+                    }
+                    return
+                }
+                
+                guard (200...299).contains(httpResponse.statusCode) else {
+                    DispatchQueue.main.async {
+                        completion(.failure(NetworkError.statusCode(httpResponse.statusCode)))
                     }
                     return
                 }
                 
                 guard let data = data else {
                     DispatchQueue.main.async {
-                        completion(.failure(NSError(domain: "Network", code: -3, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
+                        completion(.failure(NetworkError.noData))
                     }
                     return
                 }
                 
                 do {
                     let response = try self.decoder.decode(TodoResponse.self, from: data)
+                    
                     DispatchQueue.main.async {
                         completion(.success(response.tasks))
                     }
                 } catch {
                     DispatchQueue.main.async {
-                        completion(.failure(error))
+                        completion(.failure(NetworkError.decodingFailed(error)))
                     }
                 }
             }
@@ -86,3 +110,35 @@ final class NetworkService {
     }
 }
 
+// MARK: - Network Errors
+enum NetworkError: LocalizedError {
+    case invalidURL
+    case requestFailed(Error)
+    case invalidResponse
+    case statusCode(Int)
+    case decodingFailed(Error)
+    case noInternetConnection
+    case timeout
+    case noData
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return "Invalid URL"
+        case .requestFailed(let error):
+            return "Request failed: \(error.localizedDescription)"
+        case .invalidResponse:
+            return "Invalid response from server"
+        case .statusCode(let code):
+            return "Server error: \(code)"
+        case .decodingFailed(let error):
+            return "Failed to parse response: \(error.localizedDescription)"
+        case .noInternetConnection:
+            return "No internet connection"
+        case .timeout:
+            return "Request timeout"
+        case .noData:
+            return "No data received"
+        }
+    }
+}
