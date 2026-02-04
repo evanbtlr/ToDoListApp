@@ -5,7 +5,7 @@
 //  Created by Evan Brother on 02.02.2026.
 //
 
-internal import Foundation
+import Foundation
 
 // MARK: - Presenter
 final class TodoListPresenter {
@@ -15,16 +15,23 @@ final class TodoListPresenter {
     var interactor: TodoListInteractorProtocol?
     var router: TodoListRouterProtocol?
     
-    private var allTasks: [TodoTask] = []
-    private var filteredTasks: [TodoTask] = []
-    private var isSearching = false
+    private(set) var allTasks: [TodoTask] = []
+    private(set) var filteredTasks: [TodoTask] = []
+    private(set) var isSearching = false
     
     private var actualTasks: [TodoTask] {
         self.isSearching ? self.filteredTasks : self.allTasks
     }
     
+    // MARK: Methods
+    func set(tasks: [TodoTask]) {
+        self.allTasks = tasks
+        
+        self.updateFilteredTasks(with: self.view?.searchText)
+    }
+    
     // MARK: Private Methods
-    func updateFilteredTasks(with query: String?) {
+    private func updateFilteredTasks(with query: String?) {
         guard let query = query, !query.isEmpty, self.isSearching else {
             self.filteredTasks = self.allTasks
             return
@@ -82,9 +89,7 @@ extension TodoListPresenter: TodoListPresenterProtocol {
 // MARK: - Interactor Output Protocol
 extension TodoListPresenter: TodoListInteractorOutputProtocol {
     func tasksFetched(_ tasks: [TodoTask]) {
-        self.allTasks = tasks
-        
-        self.updateFilteredTasks(with: self.view?.searchText)
+        self.set(tasks: tasks)
         
         self.view?.showTasks(self.filteredTasks)
         

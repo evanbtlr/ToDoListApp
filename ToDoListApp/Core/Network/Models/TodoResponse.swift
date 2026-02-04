@@ -5,8 +5,6 @@
 //  Created by Evan Brother on 03.02.2026.
 //
 
-internal import Foundation
-
 struct TodoResponse: nonisolated Decodable {
     let tasks: [LightTodoItem]
     let total: Int

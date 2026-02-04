@@ -5,7 +5,6 @@
 //  Created by Evan Brother on 02.02.2026.
 //
 
-internal import Foundation
 import CoreData
 
 struct TodoTask {
@@ -30,7 +29,7 @@ struct TodoTask {
     // MARK: Mapping from CoreData
     init(from todoItem: TodoItem) {
         self.id = todoItem.id ?? UUID()
-        self.title = todoItem.title ?? ""
+        self.title = todoItem.title ?? String()
         self.description = todoItem.desc
         self.createdAt = todoItem.createdDate ?? .now
         self.isCompleted = todoItem.isCompleted

@@ -12,9 +12,12 @@ final class CoreDataStack {
     // MARK: Singleton
     static let shared = CoreDataStack()
     
-    private init() {}
+    init(inMemory: Bool = false) {
+        self.inMemory = inMemory
+    }
     
     // MARK: Properties
+    private let inMemory: Bool
     private let modelName = "TodoModel"
     
     // MARK: Persistent Container

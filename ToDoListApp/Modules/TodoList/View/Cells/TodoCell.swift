@@ -52,7 +52,7 @@ final class TodoCell: UITableViewCell {
     func configurate(with task: TodoTask) {
         self.title = task.title
         
-        self.descriptionLabel.text = task.description ?? ""
+        self.descriptionLabel.text = task.description ?? String()
         self.dateLabel.text = task.createdAt.formatted(date: .numeric, time: .omitted)
         self.completedSwitch.isOn = task.isCompleted
 

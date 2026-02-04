@@ -37,6 +37,7 @@ final class EditTodoViewController: UIViewController {
         self.setupConstraints()
         self.setupNavigationBar()
         self.setupKeyboardHandling()
+        self.setupAccessibility()
         
         self.presenter?.viewDidLoad()
         
@@ -288,6 +289,13 @@ final class EditTodoViewController: UIViewController {
             action: #selector(cancelButtonTapped)
         )
         self.navigationItem.leftBarButtonItem?.tintColor = .systemRed
+    }
+    
+    private func setupAccessibility() {
+        self.titleTextField.accessibilityIdentifier = "titleTextField"
+        self.descriptionTextView.accessibilityIdentifier = "descriptionTextView"
+        self.completedSwitch.accessibilityIdentifier = "completedSwitch"
+        self.saveButton.accessibilityIdentifier = "saveButton"
     }
     
     private func setupKeyboardHandling() {

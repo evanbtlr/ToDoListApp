@@ -5,7 +5,7 @@
 //  Created by Evan Brother on 03.02.2026.
 //
 
-internal import Foundation
+import Foundation
 
 extension TodoItem {
     public override var description: String {

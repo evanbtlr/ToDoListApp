@@ -5,7 +5,7 @@
 //  Created by Evan Brother on 04.02.2026.
 //
 
-internal import Foundation
+import Foundation
 
 struct EditTodoData {
     var id: UUID?

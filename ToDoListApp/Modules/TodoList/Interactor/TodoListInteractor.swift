@@ -5,7 +5,7 @@
 //  Created by Evan Brother on 02.02.2026.
 //
 
-internal import Foundation
+import Foundation
 
 // MARK: - Interactor
 final class TodoListInteractor {

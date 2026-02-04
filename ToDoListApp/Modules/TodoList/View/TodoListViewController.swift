@@ -26,6 +26,7 @@ final class TodoListViewController: UIViewController {
     private weak var loadingIndicator: UIActivityIndicatorView!
     
     private weak var emptyStateView: UIView!
+    private weak var emptyMessageLabel: UILabel!
     
     private weak var searchController: UISearchController!
     
@@ -36,6 +37,7 @@ final class TodoListViewController: UIViewController {
         self.setupUI()
         self.setupEmptyView()
         self.setupConstraints()
+        self.setupAccessibility()
         
         self.presenter?.viewDidLoad()
     }
@@ -146,6 +148,8 @@ final class TodoListViewController: UIViewController {
         messageLabel.setContentHuggingPriority(.init(251), for: .vertical)
         messageLabel.setContentCompressionResistancePriority(.init(751), for: .vertical)
         
+        self.emptyMessageLabel = messageLabel
+        
         labelsStackView.addArrangedSubview(titleLabel)
         labelsStackView.addArrangedSubview(messageLabel)
         
@@ -182,6 +186,12 @@ final class TodoListViewController: UIViewController {
             emptyStateView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             emptyStateView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+    
+    private func setupAccessibility() {
+        self.tableView.accessibilityIdentifier = "todoListTableView"
+        self.searchController.searchBar.accessibilityIdentifier = "todoSearchBar"
+        self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "addTaskButton"
     }
     
     // MARK: Actions
@@ -316,9 +326,10 @@ extension TodoListViewController: TodoListViewProtocol {
     }
     
     func updateEmptyState() {
-        let shouldShowEmptyState = self.tasks.isEmpty && !self.searchController.isActive
+        let shouldShowEmptyState = self.tasks.isEmpty
         
-        guard shouldShowEmptyState != self.emptyStateView.isHidden else { return }
+        guard shouldShowEmptyState == self.emptyStateView.isHidden else { return }
+        self.emptyMessageLabel.isHidden = self.searchController.isActive
         
         if shouldShowEmptyState {
             self.emptyStateView.isHidden = false

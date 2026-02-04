@@ -5,7 +5,7 @@
 //  Created by Evan Brother on 03.02.2026.
 //
 
-internal import Foundation
+import Foundation
 import CoreData
 
 // MARK: Manager
@@ -14,10 +14,12 @@ final class CoreDataManager {
     // MARK: Singleton
     static let shared = CoreDataManager()
     
-    private init() {}
+    init(stack: CoreDataStack = .shared) {
+        self.stack = stack
+    }
     
     // MARK: Properties
-    private let coreDataStack = CoreDataStack.shared
+    private let stack: CoreDataStack
     
     // MARK: Load Initial Data
     func loadInitialDataFromAPI(completion: @escaping (Result<[TodoItem], Error>) -> Void) {
@@ -79,7 +81,7 @@ final class CoreDataManager {
     
     // MARK: Helper Methods
     private func performFetch<T>(_ fetchRequest: NSFetchRequest<T>, completion: @escaping (Result<[T], Error>) -> Void) where T: NSManagedObject {
-        self.coreDataStack.performBackgroundTask { context in
+        self.stack.performBackgroundTask { context in
             do {
                 let results = try context.fetch(fetchRequest)
                 
@@ -132,7 +134,7 @@ extension CoreDataManager: CoreDataManagerProtocol {
     /// Create new todo item
     func create(title: String, description: String?, completion: @escaping (Result<TodoItem, any Error>) -> Void) {
         
-        self.coreDataStack.performBackgroundTask { context in
+        self.stack.performBackgroundTask { context in
             let item = TodoItem(context: context)
             
             item.id = UUID()
@@ -159,7 +161,7 @@ extension CoreDataManager: CoreDataManagerProtocol {
     
     /// Update existing todo item
     func update(_ item: TodoItem, title: String?, description: String?, isCompleted: Bool?, completion: @escaping (Result<Void, any Error>) -> Void) {
-        self.coreDataStack.performBackgroundTask { context in
+        self.stack.performBackgroundTask { context in
             guard let objectID = item.objectID.uriRepresentation().absoluteString.data(using: .utf8) else {
                 DispatchQueue.main.async {
                     completion(.failure(NSError(domain: "CoreData", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid object ID"])))
@@ -206,7 +208,7 @@ extension CoreDataManager: CoreDataManagerProtocol {
     
     /// Delete todo item
     func delete(_ item: TodoItem, completion: @escaping (Result<Void, any Error>) -> Void) {
-        self.coreDataStack.performBackgroundTask { context in
+        self.stack.performBackgroundTask { context in
             guard let objectID = item.objectID.uriRepresentation().absoluteString.data(using: .utf8) else {
                 DispatchQueue.main.async {
                     completion(.failure(NSError(domain: "CoreData", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid object ID"])))
@@ -267,7 +269,7 @@ extension CoreDataManager: CoreDataManagerProtocol {
     
     /// Save todo items from DTOs (for initial API loading)
     func saveFromDTOs(_ items: [LightTodoItem], completion: @escaping (Result<[TodoItem], Error>) -> Void) {
-        self.coreDataStack.performBackgroundTask { context in
+        self.stack.performBackgroundTask { context in
             // First, delete existing todos with serverIds
             let fetchRequest: NSFetchRequest<NSFetchRequestResult> = TodoItem.fetchRequest()
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
@@ -297,7 +299,7 @@ extension CoreDataManager: CoreDataManagerProtocol {
     
     /// Delete all todo items
     func deleteAll(completion: @escaping (Result<Void, any Error>) -> Void) {
-        self.coreDataStack.performBackgroundTask { context in
+        self.stack.performBackgroundTask { context in
             let fetchRequest: NSFetchRequest<NSFetchRequestResult> = TodoItem.fetchRequest()
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
             
