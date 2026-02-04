@@ -45,7 +45,7 @@ The app is built using the **VIPER** architecture:
 git clone https://github.com/evanbtlr/ToDoListApp.git
 ```
 
-2. Open `ToDoListApp.xcodeproj` in Xcode 26+
+2. Open `ToDoListApp.xcodeproj` in Xcode
 
 3. Build and run the project (Cmd + R)
 
@@ -88,3 +88,7 @@ Run tests: `Cmd + U` in Xcode
 - **iOS 18.6+**
 - **iPhone/iPad** (adaptive interface supported)
 - **Xcode 26.2+** for building
+
+## 📄 License
+
+This project is licensed under the MIT License
