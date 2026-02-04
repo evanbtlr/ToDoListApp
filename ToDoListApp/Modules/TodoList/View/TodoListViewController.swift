@@ -44,7 +44,7 @@ final class TodoListViewController: UIViewController {
     
     // MARK: Setup
     private func setupUI() {
-        self.title = "Todo List"
+        self.title = String(localized: .toDoList)
         self.definesPresentationContext = true
         
         self.view.backgroundColor = .systemBackground
@@ -83,7 +83,7 @@ final class TodoListViewController: UIViewController {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search tasks ..."
+        searchController.searchBar.placeholder = String(localized: .tasksSearch)
         searchController.searchBar.searchBarStyle = .minimal
         searchController.searchBar.tintColor = .accent
         
@@ -126,7 +126,7 @@ final class TodoListViewController: UIViewController {
         let titleLabel = UILabel()
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.text = "No Tasks Yet"
+        titleLabel.text = String(localized: .emptyStateTitle)
         titleLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
         titleLabel.textColor = .label
         titleLabel.textAlignment = .center
@@ -139,7 +139,7 @@ final class TodoListViewController: UIViewController {
         let messageLabel = UILabel()
         
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
-        messageLabel.text = "Tap + to add your first task"
+        messageLabel.text = String(localized: .emptyStateMessage)
         messageLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         messageLabel.textColor = .secondaryLabel
         messageLabel.textAlignment = .center
@@ -207,13 +207,13 @@ final class TodoListViewController: UIViewController {
     
     private func showDeleteConfirmation(for indexPath: IndexPath) {
         let alert = UIAlertController(
-            title: "Delete Task",
-            message: "Are you sure you want to delete this task?",
+            title: String(localized: .dialogTaskDeleteTitle),
+            message: String(localized: .dialogTaskDeleteMessage),
             preferredStyle: .alert
         )
         
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: String(localized: .buttonCancel), style: .cancel))
+        alert.addAction(UIAlertAction(title: String(localized: .buttonDelete), style: .destructive) { [weak self] _ in
             self?.presenter?.didDeleteTask(at: indexPath.row)
         })
         
@@ -275,7 +275,7 @@ extension TodoListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let task = tasks[indexPath.row]
-        let title = task.isCompleted ? "Mark\nPending" : "Mark\nDone"
+        let title = task.isCompleted ? String(localized: .swipeActionMarkPending) : String(localized: .swipeActionMarkDone)
         
         let toggleAction = UIContextualAction(
             style: .normal,
@@ -347,9 +347,9 @@ extension TodoListViewController: TodoListViewProtocol {
     }
     
     func showError(_ message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: String(localized: .error), message: message, preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: String(localized: .ok), style: .default))
         
         self.present(alert, animated: true)
     }

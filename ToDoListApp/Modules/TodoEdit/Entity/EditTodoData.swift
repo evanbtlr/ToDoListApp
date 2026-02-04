@@ -30,7 +30,7 @@ struct EditTodoData {
     
     var validationErrorMessage: String? {
         if title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            return "Title cannot be empty"
+            return String(localized: .errorValidationTitle)
         }
         
         return nil

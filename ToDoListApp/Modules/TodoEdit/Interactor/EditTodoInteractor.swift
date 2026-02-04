@@ -35,7 +35,7 @@ extension EditTodoInteractor: EditTodoInteractorProtocol {
     
     func update(_ data: EditTodoData, completion: @escaping (Result<TodoTask, Error>) -> Void) {
         guard let id = data.id else {
-            completion(.failure(NSError(domain: "EditTodo", code: -1, userInfo: [NSLocalizedDescriptionKey: "Task ID is required for update"])))
+            completion(.failure(EditTodoInteractorError.invalidTaskId))
             return
         }
         
@@ -46,7 +46,7 @@ extension EditTodoInteractor: EditTodoInteractorProtocol {
             switch fetchResult {
             case .success(let todoItem):
                 guard let todoItem = todoItem else {
-                    completion(.failure(NSError(domain: "EditTodo", code: -2, userInfo: [NSLocalizedDescriptionKey: "Task not found"])))
+                    completion(.failure(EditTodoInteractorError.taskNotFound))
                     return
                 }
                 
@@ -59,7 +59,7 @@ extension EditTodoInteractor: EditTodoInteractorProtocol {
                             switch finalResult {
                             case .success(let updatedItem):
                                 guard let updatedItem = updatedItem else {
-                                    completion(.failure(NSError(domain: "EditTodo", code: -3, userInfo: [NSLocalizedDescriptionKey: "Task not found after update"])))
+                                    completion(.failure(EditTodoInteractorError.taskNotFoundAfterUpdate))
                                     return
                                 }
                                 
@@ -80,6 +80,24 @@ extension EditTodoInteractor: EditTodoInteractorProtocol {
             case .failure(let error):
                 completion(.failure(error))
             }
+        }
+    }
+}
+
+// MARK: - Network Errors
+enum EditTodoInteractorError: LocalizedError {
+    case invalidTaskId
+    case taskNotFound
+    case taskNotFoundAfterUpdate
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidTaskId:
+            return String(localized: .errorEditInvalidId)
+        case .taskNotFound:
+            return String(localized: .errorEditNotFound)
+        case .taskNotFoundAfterUpdate:
+            return String(localized: .errorEditNotFoundAfterUpdate)
         }
     }
 }

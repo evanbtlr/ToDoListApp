@@ -46,7 +46,7 @@ final class EditTodoViewController: UIViewController {
     
     // MARK: Setup
     private func setupUI() {
-        self.title = "Edit Task"
+        self.title = String(localized: .taskNew)
         self.view.backgroundColor = .systemBackground
         
         // Scroll View
@@ -68,7 +68,7 @@ final class EditTodoViewController: UIViewController {
         let titleLabel = UILabel()
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.text = "Title"
+        titleLabel.text = String(localized: .taskFieldTitle)
         titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         titleLabel.textColor = .label
         
@@ -78,7 +78,7 @@ final class EditTodoViewController: UIViewController {
         let titleTextField = UITextField()
         
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
-        titleTextField.placeholder = "Enter task title"
+        titleTextField.placeholder = String(localized: .taskFieldTitlePlaceholder)
         titleTextField.borderStyle = .roundedRect
         titleTextField.font = UIFont.systemFont(ofSize: 16)
         titleTextField.autocapitalizationType = .sentences
@@ -101,7 +101,7 @@ final class EditTodoViewController: UIViewController {
         let descriptionLabel = UILabel()
         
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.text = "Description (optional)"
+        descriptionLabel.text = String(localized: .taskFieldDesc)
         descriptionLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         descriptionLabel.textColor = .label
         
@@ -125,7 +125,7 @@ final class EditTodoViewController: UIViewController {
         let statusLabel = UILabel()
         
         statusLabel.translatesAutoresizingMaskIntoConstraints = false
-        statusLabel.text = "Status"
+        statusLabel.text = String(localized: .taskStatus)
         statusLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         statusLabel.textColor = .label
         
@@ -143,7 +143,7 @@ final class EditTodoViewController: UIViewController {
         let switchLabel = UILabel()
         
         switchLabel.translatesAutoresizingMaskIntoConstraints = false
-        switchLabel.text = "Completed"
+        switchLabel.text = String(localized: .taskStatusCompleted)
         switchLabel.font = UIFont.systemFont(ofSize: 16)
         switchLabel.textColor = .label
         
@@ -153,7 +153,7 @@ final class EditTodoViewController: UIViewController {
         let saveButton = UIButton(type: .system)
         
         saveButton.translatesAutoresizingMaskIntoConstraints = false
-        saveButton.setTitle("Save", for: .normal)
+        saveButton.setTitle(String(localized: .buttonSave), for: .normal)
         saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         saveButton.setTitleColor(.white, for: .normal)
         saveButton.backgroundColor = .systemBlue
@@ -173,7 +173,7 @@ final class EditTodoViewController: UIViewController {
         let placeholderLabel = UILabel()
         
         placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
-        placeholderLabel.text = "Add description..."
+        placeholderLabel.text = String(localized: .taskFieldDescPlaceholder)
         placeholderLabel.font = UIFont.systemFont(ofSize: 16)
         placeholderLabel.textColor = .tertiaryLabel
         placeholderLabel.isUserInteractionEnabled = false
@@ -414,7 +414,7 @@ extension EditTodoViewController: EditTodoViewProtocol {
         self.updatePlaceholderVisibility()
         
         // Update title based on mode
-        self.title = data.id == nil ? "New Task" : "Edit Task"
+        self.title = data.id == nil ? String(localized: .taskNew) : String(localized: .taskEdit)
     }
     
     func showValidationError(_ message: String) {
@@ -437,11 +437,11 @@ extension EditTodoViewController: EditTodoViewProtocol {
     
     func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Error",
+            title: String(localized: .error),
             message: message,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: String(localized: .ok), style: .default))
         present(alert, animated: true)
     }
     

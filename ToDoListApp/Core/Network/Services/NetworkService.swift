@@ -124,21 +124,21 @@ enum NetworkError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidURL:
-            return "Invalid URL"
+            return String(localized: .errorNetworkInvalidUrl)
         case .requestFailed(let error):
-            return "Request failed: \(error.localizedDescription)"
+            return "\(String(localized: .errorNetworkRequestFailed)): \(error.localizedDescription)"
         case .invalidResponse:
-            return "Invalid response from server"
+            return String(localized: .errorNetworkInvalidResponse)
         case .statusCode(let code):
-            return "Server error: \(code)"
+            return "\(String(localized: .errorNetworkServer)): \(code)"
         case .decodingFailed(let error):
-            return "Failed to parse response: \(error.localizedDescription)"
+            return "\(String(localized: .errorNetworkDecodeFailed)): \(error.localizedDescription)"
         case .noInternetConnection:
-            return "No internet connection"
+            return String(localized: .errorNetworkConnection)
         case .timeout:
-            return "Request timeout"
+            return String(localized: .errorNetworkTimeout)
         case .noData:
-            return "No data received"
+            return String(localized: .errorNetworkData)
         }
     }
 }

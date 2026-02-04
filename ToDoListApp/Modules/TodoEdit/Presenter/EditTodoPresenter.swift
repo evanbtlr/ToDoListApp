@@ -30,7 +30,7 @@ final class EditTodoPresenter {
     
     private func validateAndSave() {
         guard self.data.isValid else {
-            self.view?.showValidationError(data.validationErrorMessage ?? "Invalid data")
+            self.view?.showValidationError(data.validationErrorMessage ?? String(localized: .errorValidationInvalidData))
             return
         }
         
