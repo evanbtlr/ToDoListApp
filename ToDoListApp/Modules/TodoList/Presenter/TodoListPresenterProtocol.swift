@@ -7,6 +7,7 @@
 
 protocol TodoListPresenterProtocol: AnyObject {
     func viewDidLoad()
+    func handleViewWillAppear()
     
     func didTapAddButton()
     func didReqiredRefresh()

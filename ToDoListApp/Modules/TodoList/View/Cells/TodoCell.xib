@@ -10,23 +10,23 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="83" id="GWT-TT-EJb" customClass="TodoCell" customModule="ToDoListApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="393" height="83"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="99" id="GWT-TT-EJb" customClass="TodoCell" customModule="ToDoListApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="99"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="GWT-TT-EJb" id="tle-bE-4ox">
-                <rect key="frame" x="0.0" y="0.0" width="393" height="83"/>
+                <rect key="frame" x="0.0" y="0.0" width="393" height="99"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="sfs-bf-OZT">
-                        <rect key="frame" x="316" y="27.666666666666671" width="63" height="28"/>
+                        <rect key="frame" x="316" y="35.666666666666664" width="63" height="28"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="61" id="JQL-PQ-Sch"/>
                         </constraints>
                         <color key="tintColor" name="AccentColor"/>
                         <color key="onTintColor" name="AccentColor"/>
                     </switch>
-                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="BGg-PH-k7i">
-                        <rect key="frame" x="16" y="16" width="284" height="51"/>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="BGg-PH-k7i">
+                        <rect key="frame" x="16" y="16" width="284" height="67"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ke-Z7-PxZ">
                                 <rect key="frame" x="0.0" y="0.0" width="284" height="19.333333333333332"/>
@@ -35,12 +35,12 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VIn-Gm-ek2">
-                                <rect key="frame" x="0.0" y="19.333333333333336" width="284" height="17"/>
+                                <rect key="frame" x="0.0" y="23.333333333333336" width="284" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" verticalCompressionResistancePriority="748" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tho-dF-wzd">
-                                <rect key="frame" x="0.0" y="36.333333333333336" width="284" height="14.666666666666664"/>
+                                <rect key="frame" x="0.0" y="44.333333333333336" width="284" height="22.666666666666664"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                 <nil key="highlightedColor"/>
@@ -63,7 +63,7 @@
                 <outlet property="descriptionLabel" destination="VIn-Gm-ek2" id="sw4-0s-Tfg"/>
                 <outlet property="titleLabel" destination="3ke-Z7-PxZ" id="ds9-aN-fUX"/>
             </connections>
-            <point key="canvasLocation" x="-640.4580152671756" y="73.591549295774655"/>
+            <point key="canvasLocation" x="-640.4580152671756" y="79.225352112676063"/>
         </tableViewCell>
     </objects>
     <resources>

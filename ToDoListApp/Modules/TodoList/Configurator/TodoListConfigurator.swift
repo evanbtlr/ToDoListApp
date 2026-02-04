@@ -11,6 +11,21 @@ import UIKit
 final class TodoListConfigurator {
     
     static func configure() -> UIViewController {
-        return TodoListRouter.createModule()
+        let view = TodoListViewController()
+        let presenter = TodoListPresenter()
+        let interactor = TodoListInteractor()
+        let router = TodoListRouter()
+        
+        view.presenter = presenter
+        
+        presenter.view = view
+        presenter.interactor = interactor
+        presenter.router = router
+        
+        interactor.presenter = presenter
+        
+        router.viewController = view
+        
+        return view
     }
 }

@@ -23,6 +23,7 @@ final class TodoListInteractor {
             DispatchQueue.main.async {
                 self.presenter?.tasksFetched(tasks)
             }
+            
         case .failure(let error):
             DispatchQueue.main.async {
                 self.presenter?.tasksFetchFailed(error)
@@ -66,13 +67,14 @@ extension TodoListInteractor: TodoListInteractorProtocol {
                     switch updateResult {
                     case .success:
                         self.fetchTasks() // Refresh the list
+                        
                     case .failure(let error):
-                        self.presenter?.tasksFetchFailed(error)
+                        self.handleCoreDataResult(.failure(error))
                     }
                 }
 
             case .failure(let error):
-                self.presenter?.tasksFetchFailed(error)
+                self.handleCoreDataResult(.failure(error))
             }
         }
     }
@@ -92,12 +94,12 @@ extension TodoListInteractor: TodoListInteractorProtocol {
                         self.fetchTasks() // Refresh the list
                         
                     case .failure(let error):
-                        self.presenter?.tasksFetchFailed(error)
+                        self.handleCoreDataResult(.failure(error))
                     }
                 }
                 
             case .failure(let error):
-                self.presenter?.tasksFetchFailed(error)
+                self.handleCoreDataResult(.failure(error))
             }
         }
     }

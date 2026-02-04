@@ -23,11 +23,6 @@ final class TodoListPresenter {
         self.isSearching ? self.filteredTasks : self.allTasks
     }
     
-    // MARK: Methods
-    func handleViewWillAppear() {
-        self.interactor?.fetchTasks()
-    }
-    
     // MARK: Private Methods
     func updateFilteredTasks(with query: String?) {
         guard let query = query, !query.isEmpty, self.isSearching else {
@@ -46,6 +41,10 @@ final class TodoListPresenter {
 extension TodoListPresenter: TodoListPresenterProtocol {
     func viewDidLoad() {
         self.view?.showLoading()
+        self.interactor?.fetchTasks()
+    }
+    
+    func handleViewWillAppear() {
         self.interactor?.fetchTasks()
     }
     

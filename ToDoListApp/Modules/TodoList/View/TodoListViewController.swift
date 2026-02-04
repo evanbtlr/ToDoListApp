@@ -47,6 +47,7 @@ final class TodoListViewController: UIViewController {
         
         self.view.backgroundColor = .systemBackground
         
+        // Table View
         let tableView = UITableView()
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -59,24 +60,24 @@ final class TodoListViewController: UIViewController {
         tableView.dataSource = self
         
         self.tableView = tableView
-        self.view.addSubview(tableView)
         
+        // Loading Indicator
         let loadingIndicator = UIActivityIndicatorView(style: .large)
         
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         loadingIndicator.hidesWhenStopped = true
         
         self.loadingIndicator = loadingIndicator
-        self.view.addSubview(loadingIndicator)
         
+        // Refresh Control
         let refreshControl = UIRefreshControl()
         
         refreshControl.tintColor = .secondaryLabel
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         
         self.refreshControl = refreshControl
-        self.tableView.refreshControl = refreshControl
         
+        // Search Controller
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -86,6 +87,14 @@ final class TodoListViewController: UIViewController {
         
         self.searchController = searchController
         
+        // Add subviews
+        self.view.addSubview(tableView)
+        self.view.addSubview(loadingIndicator)
+        
+        // Setup refresh control
+        self.tableView.refreshControl = refreshControl
+        
+        // Setup navigation item
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
         self.navigationItem.searchController = searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false

@@ -8,10 +8,8 @@
 import UIKit
 
 protocol TodoListRouterProtocol: AnyObject {
-    
     var viewController: UIViewController? { get set }
     
-    static func createModule() -> UIViewController
     func navigateToAddTask()
     func navigateToEditTask(_ task: TodoTask)
 }
