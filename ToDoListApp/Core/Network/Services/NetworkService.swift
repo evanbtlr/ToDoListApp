@@ -5,7 +5,7 @@
 //  Created by Evan Brother on 03.02.2026.
 //
 
-import Foundation
+internal import Foundation
 
 final class NetworkService {
     

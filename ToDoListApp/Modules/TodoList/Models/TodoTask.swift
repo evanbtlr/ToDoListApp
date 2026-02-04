@@ -5,7 +5,7 @@
 //  Created by Evan Brother on 02.02.2026.
 //
 
-import Foundation
+internal import Foundation
 import CoreData
 
 struct TodoTask {

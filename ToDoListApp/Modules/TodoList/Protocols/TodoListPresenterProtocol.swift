@@ -7,10 +7,13 @@
 
 protocol TodoListPresenterProtocol: AnyObject {
     func viewDidLoad()
+    
     func didTapAddButton()
     func didReqiredRefresh()
+    
     func didSelectTask(at index: Int)
     func didToggleTaskCompletion(at index: Int)
     func didDeleteTask(at index: Int)
+    
     func searchTasks(with query: String)
 }

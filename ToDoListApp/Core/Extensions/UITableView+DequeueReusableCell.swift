@@ -12,7 +12,7 @@ extension UITableView {
         return self.dequeueReusableCell(withIdentifier: TCell.identifier(), for: indexPath) as! TCell
     }
     
-    func register<TCell>(cell cellType: TCell.Type) where TCell: UITableViewCell {
+    func registerFromNib<TCell>(cell cellType: TCell.Type) where TCell: UITableViewCell {
         let nib = UINib(nibName: cellType.identifier(), bundle: nil)
         self.register(nib, forCellReuseIdentifier: cellType.identifier())
     }

@@ -5,7 +5,7 @@
 //  Created by Evan Brother on 02.02.2026.
 //
 
-import Foundation
+internal import Foundation
 
 // MARK: - Presenter
 final class TodoListPresenter {
@@ -15,20 +15,38 @@ final class TodoListPresenter {
     var interactor: TodoListInteractorProtocol?
     var router: TodoListRouterProtocol?
     
-    private var tasks: [TodoTask] = []
+    private var allTasks: [TodoTask] = []
     private var filteredTasks: [TodoTask] = []
+    private var isSearching = false
+    
+    private var actualTasks: [TodoTask] {
+        self.isSearching ? self.filteredTasks : self.allTasks
+    }
+    
+    // MARK: Methods
+    func handleViewWillAppear() {
+        self.interactor?.fetchTasks()
+    }
     
     // MARK: Private Methods
-    private func loadTasks() {
-        self.view?.showLoading()
-        self.interactor?.fetchTasks()
+    func updateFilteredTasks(with query: String?) {
+        guard let query = query, !query.isEmpty, self.isSearching else {
+            self.filteredTasks = self.allTasks
+            return
+        }
+        
+        self.filteredTasks = self.allTasks.filter {
+            $0.title.localizedCaseInsensitiveContains(query) ||
+            ($0.description?.localizedCaseInsensitiveContains(query) ?? false)
+        }
     }
 }
 
 // MARK: - Presenter Protocol
 extension TodoListPresenter: TodoListPresenterProtocol {
     func viewDidLoad() {
-        self.loadTasks()
+        self.view?.showLoading()
+        self.interactor?.fetchTasks()
     }
     
     func didTapAddButton() {
@@ -40,34 +58,49 @@ extension TodoListPresenter: TodoListPresenterProtocol {
     }
     
     func didSelectTask(at index: Int) {
-        // TODO: Navigate to edit
+        let task = self.actualTasks[index]
+        self.router?.navigateToEditTask(task)
     }
     
     func didToggleTaskCompletion(at index: Int) {
-        // TODO: Toggle completion
+        let task = self.actualTasks[index]
+        self.interactor?.toggleTaskCompletion(task)
     }
     
     func didDeleteTask(at index: Int) {
-        // TODO: Delete task
+        let task = self.actualTasks[index]
+        self.interactor?.deleteTask(task)
     }
     
     func searchTasks(with query: String) {
-        // TODO: Impelement search
+        self.isSearching = query.isEmpty == false
+        self.updateFilteredTasks(with: query)
+        self.view?.showTasks(self.filteredTasks)
+        self.view?.updateEmptyState()
     }
 }
 
 // MARK: - Interactor Output Protocol
 extension TodoListPresenter: TodoListInteractorOutputProtocol {
     func tasksFetched(_ tasks: [TodoTask]) {
-        self.tasks = tasks
-        self.filteredTasks = tasks
+        self.allTasks = tasks
+        
+        self.updateFilteredTasks(with: self.view?.searchText)
+        
+        self.view?.showTasks(self.filteredTasks)
         
         self.view?.hideLoading()
-        self.view?.showTasks(tasks)
+        self.view?.hideRefreshControl()
+        
+        self.view?.updateEmptyState()
     }
     
     func tasksFetchFailed(_ error: any Error) {
         self.view?.hideLoading()
+        self.view?.hideRefreshControl()
+        
         self.view?.showError(error.localizedDescription)
+        
+        self.view?.updateEmptyState()
     }
 }

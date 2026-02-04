@@ -5,7 +5,7 @@
 //  Created by Evan Brother on 03.02.2026.
 //
 
-import Foundation
+internal import Foundation
 import CoreData
 
 // MARK: Manager
@@ -36,35 +36,19 @@ final class CoreDataManager {
             guard let self = self else { return }
             
             switch result {
-            case .success(let items):
+            case .success(let dtoItems):
 #if DEBUG
-                print("Loaded \(items.count) todos from API")
+                print("Loaded \(dtoItems.count) todos from API")
 #endif
                 
-                self.coreDataStack.performBackgroundTask { context in
-                    do {
-                        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = TodoItem.fetchRequest()
-                        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-                        try context.execute(deleteRequest)
+                self.saveFromDTOs(dtoItems) { saveResult in
+                    switch saveResult {
+                    case .success(let todoItems):
+                        UserDefaults.standard.set(true, forKey: Constants.hasLoadedInitialData)
+                        completion(.success(todoItems))
                         
-                        for item in items {
-                            let newItem = item.toCoreDataEntity(context: context)
-                            print(newItem.description)
-                        }
-                        
-                        if context.hasChanges {
-                            try context.save()
-                            
-                            UserDefaults.standard.set(true, forKey: Constants.hasLoadedInitialData)
-                        }
-                        
-                        DispatchQueue.main.async {
-                            self.fetchAll(completion: completion)
-                        }
-                    } catch {
-                        DispatchQueue.main.async {
-                            completion(.failure(error))
-                        }
+                    case .failure(let error):
+                        completion(.failure(error))
                     }
                 }
                 
@@ -107,65 +91,6 @@ final class CoreDataManager {
                     completion(.failure(error))
                 }
             }
-        }
-    }
-    
-    private func handleInitialTodoItems(_ items: [LightTodoItem], completion: @escaping (Result<[TodoItem], Error>) -> Void) {
-        
-        let context = self.coreDataStack.newBackgroundContext()
-        
-        context.perform {
-            do {
-                let fetchRequest: NSFetchRequest<NSFetchRequestResult> = TodoItem.fetchRequest()
-                let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-                try context.execute(deleteRequest)
-                
-                for item in items {
-                    _ = item.toCoreDataEntity(context: context)
-                }
-                
-                if context.hasChanges {
-                    try context.save()
-                }
-                
-
-                self.coreDataStack.viewContext.perform {
-                    do {
-                        try self.coreDataStack.viewContext.save()
-                    } catch {
-                        print("Error saving view context: \(error)")
-                    }
-                }
-                
-                // 6. Отмечаем загрузку
-                UserDefaults.standard.set(true, forKey: "hasLoadedInitialData")
-                
-                // 7. Читаем из ТОГО ЖЕ контекста
-                let fetchRequest2: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()
-                fetchRequest2.sortDescriptors = [
-                    NSSortDescriptor(key: "createdDate", ascending: false)
-                ]
-                
-                
-                let savedItems = try context.fetch(fetchRequest2)
-                print("✅ Now have \(savedItems.count) items in CoreData (background context)")
-                
-                // 8. Преобразуем в объекты главного контекста
-                let objectIDs = savedItems.map { $0.objectID }
-                
-                DispatchQueue.main.async {
-                    let mainContext = self.coreDataStack.viewContext
-                    let mainThreadItems = objectIDs.compactMap { try? mainContext.existingObject(with: $0) as? TodoItem }
-                    
-                    print("✅ Converted to \(mainThreadItems.count) items in main context")
-                    completion(.success(mainThreadItems))
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
-            }
-            
         }
     }
 }
@@ -217,7 +142,9 @@ extension CoreDataManager: CoreDataManagerProtocol {
             item.createdDate = Date()
             
             do {
-                try context.save()
+                if context.hasChanges {
+                    try context.save()
+                }
                 
                 DispatchQueue.main.async {
                     completion(.success(item))
@@ -262,7 +189,9 @@ extension CoreDataManager: CoreDataManagerProtocol {
             }
             
             do {
-                try context.save()
+                if context.hasChanges {
+                    try context.save()
+                }
                 
                 DispatchQueue.main.async {
                     completion(.success(()))
@@ -297,7 +226,9 @@ extension CoreDataManager: CoreDataManagerProtocol {
             context.delete(todoToDelete)
             
             do {
-                try context.save()
+                if context.hasChanges {
+                    try context.save()
+                }
                 
                 DispatchQueue.main.async {
                     completion(.success(()))
@@ -334,6 +265,36 @@ extension CoreDataManager: CoreDataManagerProtocol {
     
     // MARK: Bulk Operations
     
+    /// Save todo items from DTOs (for initial API loading)
+    func saveFromDTOs(_ items: [LightTodoItem], completion: @escaping (Result<[TodoItem], Error>) -> Void) {
+        self.coreDataStack.performBackgroundTask { context in
+            // First, delete existing todos with serverIds
+            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = TodoItem.fetchRequest()
+            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            
+            do {
+                try context.execute(deleteRequest)
+                
+                // Create new todos from DTOs
+                for item in items {
+                    _ = item.toCoreDataEntity(context: context)
+                }
+                
+                if context.hasChanges {
+                    try context.save()
+                }
+                
+                DispatchQueue.main.async {
+                    self.fetchAll(completion: completion)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+    
     /// Delete all todo items
     func deleteAll(completion: @escaping (Result<Void, any Error>) -> Void) {
         self.coreDataStack.performBackgroundTask { context in
@@ -342,7 +303,10 @@ extension CoreDataManager: CoreDataManagerProtocol {
             
             do {
                 try context.execute(deleteRequest)
-                try context.save()
+                
+                if context.hasChanges {
+                    try context.save()
+                }
                 
                 DispatchQueue.main.async {
                     completion(.success(()))

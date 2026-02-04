@@ -7,7 +7,7 @@
 
 #if DEBUG
 
-import Foundation
+internal import Foundation
 
 struct DebugUtils {
     private init() {}
