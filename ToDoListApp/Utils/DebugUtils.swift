@@ -14,12 +14,12 @@ struct DebugUtils {
     
     static func printFirstLaunchStatus() {
         let hasLoaded = UserDefaults.standard.bool(forKey: Constants.hasLoadedInitialData)
-            print(hasLoaded ? "Already loaded initial data" : "First launch, will load from API")
+        Logger.info(hasLoaded ? "Already loaded initial data" : "First launch, will load from API")
         }
         
         static func resetFirstLaunch() {
             UserDefaults.standard.removeObject(forKey: Constants.hasLoadedInitialData)
-            print("Reset first launch flag")
+            Logger.info("Reset first launch flag")
         }
 }
 

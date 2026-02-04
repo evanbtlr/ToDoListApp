@@ -31,7 +31,7 @@ final class CoreDataManager {
         }
         
 #if DEBUG
-        print("First launch: loading initial data from API...")
+        Logger.info("First launch: loading initial data from API...")
 #endif
         
         NetworkService.shared.fetchInitialTodoItems { [weak self] result in
@@ -40,7 +40,7 @@ final class CoreDataManager {
             switch result {
             case .success(let dtoItems):
 #if DEBUG
-                print("Loaded \(dtoItems.count) todos from API")
+                Logger.info("Loaded \(dtoItems.count) todos from API")
 #endif
                 
                 self.saveFromDTOs(dtoItems) { saveResult in
@@ -56,7 +56,7 @@ final class CoreDataManager {
                 
             case .failure(let error):
 #if DEBUG
-                print("Failed to load from API: \(error.localizedDescription)")
+                Logger.error("Failed to load from API: \(error.localizedDescription)")
 #endif
                 
                 self.fetchAll { fetchResult in
@@ -66,7 +66,7 @@ final class CoreDataManager {
                             completion(.failure(error))
                         } else {
 #if DEBUG
-                            print("Using existing local data")
+                            Logger.warning("Using existing local data")
 #endif
                             
                             completion(.success(todoItems))

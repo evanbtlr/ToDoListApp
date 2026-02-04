@@ -24,13 +24,25 @@ final class CoreDataStack {
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: modelName)
         
+        if inMemory {
+            guard let defaultStoreDescription = container.persistentStoreDescriptions.first else {
+                Logger.log(.fatal, "Failed to retrieve default persistent store description.")
+                
+                fatalError("Failed to retrieve default persistent store description.")
+            }
+            
+            defaultStoreDescription.url = URL(fileURLWithPath: "/dev/null")
+        }
+        
         container.loadPersistentStores { storeDescription, error in
             if let error = error as NSError? {
+                Logger.log(.fatal, "Unresolved error \(error), \(error.userInfo)")
+                
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
             
 #if DEBUG
-            print("CoreData store loaded: \(storeDescription.url?.absoluteString ?? "")")
+            Logger.info("CoreData store loaded: \(storeDescription.url?.absoluteString ?? "")")
 #endif
         }
         
@@ -66,11 +78,11 @@ final class CoreDataStack {
             try viewContext.save()
             
 #if DEBUG
-            print("View context saved successfully")
+            Logger.info("View context saved successfully")
 #endif
         } catch {
 #if DEBUG
-            print("Failed to save view context: \(error)")
+            Logger.error("Failed to save view context: \(error)")
 #endif
             
             viewContext.rollback()
