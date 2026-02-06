@@ -2,19 +2,19 @@
 
 A simple iOS task management application with initial data loading from API and local storage.
 
-![Swift](https://img.shields.io/badge/Swift-5.5+-orange.svg)
-![iOS](https://img.shields.io/badge/iOS-15.0+-blue.svg)
+![Swift](https://img.shields.io/badge/Swift-6.2+-orange.svg)
+![iOS](https://img.shields.io/badge/iOS-18.6+-blue.svg)
 ![Architecture](https://img.shields.io/badge/Architecture-VIPER-brightgreen.svg)
 
 ## ✨ Features
 
-- ✅ **View tasks** sorted by date
-- ➕ **Add/Edit** tasks with title, description, and status
-- 🔍 **Real-time search**
-- ❌ **Delete** by swiping
-- ✅ **Mark as completed** via toggle
-- 🔄 **Pull-to-refresh** for updates
-- 📱 **Modern UI** with dark mode support
+- **View tasks** sorted by date
+- **Add/Edit** tasks with title, description, and status
+- **Real-time search**
+- **Delete** by swiping
+- **Mark as completed** via toggle
+- **Pull-to-refresh** for updates
+- **Modern UI** with dark mode support
 
 ## 🏗️ Architecture
 
